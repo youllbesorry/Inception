@@ -1,0 +1,23 @@
+# version: '3.8'
+services:
+  nginx:
+    build:
+      context: ./requirements/nginx
+    ports:
+      - "443:443"
+
+  db:
+    build:
+      context: ./requirements/mariadb
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=ben
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=benji
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:
