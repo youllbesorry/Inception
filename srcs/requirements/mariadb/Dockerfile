@@ -1,25 +1,28 @@
-FROM debian:bullseye-slim
+FROM debian:bullseye
 
 RUN apt-get update \
-    && apt-get install -y mariadb-server gettext-base \
+    && apt-get install -y mariadb-server gettext-base build-essential curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /docker-entrypoint-initdb.d && touch /docker-entrypoint-initdb.d/init.sql
 
 RUN mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld
 
-# Copier le fichier init.sql depuis le répertoire local
-ARG MYSQL_ROOT_PASSWORD
+# Copier et exécuter le script d'initialisation
+COPY ./init_db.sh /init_db.sh
+RUN chmod 777 /init_db.sh
 
-COPY ./init.sql /docker-entrypoint-initdb.d/
+# ENV MYSQL_DATABASE=$MYSQL_DATABASE
+# ENV MYSQL_USER=$MYSQL_USER
+# ENV MYSQL_PASSWORD=$MYSQL_PASSWORD
+# ENV MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+# ENV HOSTNAME=$HOSTNAME
 
-RUN service mariadb start && envsubst < /docker-entrypoint-initdb.d/init.sql | mysql -u root -p${MYSQL_ROOT_PASSWORD}
+RUN /init_db.sh
 
-# Configurer MariaDB pour écouter sur toutes les interfaces
-RUN sed -i 's/^bind-address\s*=.*$/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
-
-# Exposer le port 3306
 EXPOSE 3306
+
 
 # Définir le point d'entrée
 CMD ["mariadbd", "--bind_address=0.0.0.0"]
+
+# ENTRYPOINT ["/init_db.sh"]
