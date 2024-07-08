@@ -8,7 +8,7 @@ up:
 	mkdir -p /home/ben/data
 	mkdir -p /home/ben/data/wordpress
 	mkdir -p /home/ben/data/mariadb
-	docker compose -f $(COMPOSE_FILE) up -d
+	docker compose -f $(COMPOSE_FILE) up --build -d
 
 # Arrêter les services
 down:

@@ -1,3 +1,5 @@
+# version: '3.8'
+
 networks:
   inception:
     name: inception
@@ -17,19 +19,22 @@ services:
       - .env
     volumes:
       - wordpress_data:/var/www/html
+    ports:
+      - "8000:80"
 
   mariadb:
     container_name: mariadb
     build:
       context: ./requirements/mariadb
+      args:
+        - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+        - MYSQL_DATABASE=$MYSQL_DATABASE
+        - MYSQL_USER=$MYSQL_USER
+        - MYSQL_PASSWORD=$MYSQL_PASSWORD
+        - HOSTNAME=$HOSTNAME
+        - MYSQL_ROOT_USER=$MYSQL_ROOT_USER
     env_file:
       - .env
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      HOSTNAME: ${HOSTNAME}
     ports:
       - "3306:3306"
     volumes:

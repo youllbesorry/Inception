@@ -7,8 +7,12 @@ if [ ! -f /var/www/html/wp-config.php ]; then
     wp core download --allow-root
     echo "WordPress téléchargé."
 
+    echo dbname=$MYSQL_DATABASE dbuser=$MYSQL_USER dbpass=$MYSQL_PASSWORD \
+                     dbhost="mariadb:3306" path="/var/www/html"
+
     wp config create --allow-root --dbname=$MYSQL_DATABASE --dbuser=$MYSQL_USER --dbpass=$MYSQL_PASSWORD \
-                     --dbhost=$MYSQL_HOST --path="/var/www/html"
+                     --dbhost="mariadb:3306" --path="/var/www/html"
+    
     echo "Fichier de configuration wp-config.php créé."
 
     wp core install --allow-root --url=$WP_URL --title=$WP_TITLE --admin_user=$ADMIN_USER \
