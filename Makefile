@@ -5,9 +5,9 @@ COMPOSE_FILE=srcs/docker-compose.yml
 
 # Démarrer les services
 up:
-	mkdir -p /home/ben/data
-	mkdir -p /home/ben/data/wordpress
-	mkdir -p /home/ben/data/mariadb
+	mkdir -p /home/bfaure/data
+	mkdir -p /home/bfaure/data/wordpress
+	mkdir -p /home/bfaure/data/mariadb
 	docker compose -f $(COMPOSE_FILE) up --build -d
 
 # Arrêter les services
@@ -36,5 +36,5 @@ prune:
 	docker system prune -f --all --volumes
 
 clean:
-	rm -rf /home/ben/data
+	rm -rf /home/bfaure/data
 	docker compose -f $(COMPOSE_FILE) down --volumes --rmi all
