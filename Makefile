@@ -15,8 +15,8 @@ down:
 	docker compose -f $(COMPOSE_FILE) down
 
 # Redémarrer les services
-restart:
-	make clean && make up
+restart re:
+	make fclean && make up
 
 # Afficher les logs
 logs:
@@ -32,9 +32,13 @@ exec:
 
 # Nettoyer les conteneurs, réseaux et volumes non utilisés
 prune:
-	down clean
 	docker system prune -f --all --volumes
 
 clean:
 	rm -rf /home/bfaure/data
 	docker compose -f $(COMPOSE_FILE) down --volumes --rmi all
+
+fclean:
+	make down
+	make clean
+	make prune
